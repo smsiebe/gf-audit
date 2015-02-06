@@ -12,7 +12,7 @@ import javax.security.auth.login.LoginException;
  */
 public class JULAuditLogger implements AuditLogger {
 
-    private static final String PARENT_LOGGER = "gov.ic.geoint.gf.audit";
+    private static final String PARENT_LOGGER = "org.geoint.gf.audit";
     private static final String PROP_LOG_PATTERN = "audit.file.pattern";
     private static final String PROP_LOG_COUNT = "audit.file.count";
     private static final String PROP_LOG_APPEND = "audit.file.append";
