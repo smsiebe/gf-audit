@@ -1,8 +1,8 @@
 package org.geoint.gf.audit;
 
 import com.sun.appserv.security.AuditModule;
-import gov.ic.geoint.gf.audit.log.AuditCategory;
-import gov.ic.geoint.gf.audit.log.AuditLogger;
+import org.geoint.gf.audit.log.AuditCategory;
+import org.geoint.gf.audit.log.AuditLogger;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 

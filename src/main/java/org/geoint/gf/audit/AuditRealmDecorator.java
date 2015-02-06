@@ -10,8 +10,8 @@ import com.sun.enterprise.security.auth.realm.NoSuchUserException;
 import com.sun.enterprise.security.auth.realm.Realm;
 import com.sun.enterprise.security.auth.realm.User;
 import com.sun.enterprise.security.util.IASSecurityException;
-import gov.ic.geoint.gf.audit.log.AuditCategory;
-import gov.ic.geoint.gf.audit.log.AuditLogger;
+import org.geoint.gf.audit.log.AuditCategory;
+import org.geoint.gf.audit.log.AuditLogger;
 import java.util.Enumeration;
 import java.util.Properties;
 

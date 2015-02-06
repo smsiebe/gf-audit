@@ -1,4 +1,4 @@
-package gov.ic.geoint.gf.audit.log;
+package org.geoint.gf.audit.log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

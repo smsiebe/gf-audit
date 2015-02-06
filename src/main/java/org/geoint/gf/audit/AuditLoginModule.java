@@ -2,8 +2,8 @@ package org.geoint.gf.audit;
 
 import com.sun.enterprise.security.BasePasswordLoginModule;
 import com.sun.enterprise.security.auth.login.common.PasswordCredential;
-import gov.ic.geoint.gf.audit.log.AuditCategory;
-import gov.ic.geoint.gf.audit.log.AuditLogger;
+import org.geoint.gf.audit.log.AuditCategory;
+import org.geoint.gf.audit.log.AuditLogger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
