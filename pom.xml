@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.geoint.glassfish</groupId>
+    <artifactId>gf-audit</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>gf-audit</name>
+    <url>http://geoint.org/oss/gf-audit</url>
+    <description>Enhanced auditing for the Oracle Glassfish Application Server 
+        to meet DISA STIG requirements.</description>
+  
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    
+    <!-- credits -->
+    <developers>
+        <!-- people who wrote, and take responsibility for, code -->
+        <developer>
+            <name>Steve Siebert</name>
+            <email>steve@geoint.org</email>
+            <roles>
+                <role>Architect</role>
+                <role>Lead Developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <contributors>
+        <!-- people who contributed docs, curated issues, or made other
+        significant contributions -->
+        <contributor>
+            <organization>Army/G2 GETS</organization>
+        </contributor>
+    </contributors>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.glassfish.main.common</groupId>
+            <artifactId>glassfish-ee-api</artifactId>
+            <version>4.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
