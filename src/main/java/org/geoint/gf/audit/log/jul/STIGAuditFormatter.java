@@ -1,4 +1,4 @@
-package org.geoint.gf.audit.log;
+package org.geoint.gf.audit.log.jul;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,12 +8,13 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 /**
- * Format which contains all the required information from the DISA Application
- * Server STIG.
+ * Simple text-oriented format which contains all the required information from
+ * the DISA Application Server STIG.
  */
 public class STIGAuditFormatter extends Formatter {
 
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z");
+    private final SimpleDateFormat dateFormatter
+            = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z");
 
     @Override
     public String format(LogRecord record) {

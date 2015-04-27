@@ -1,5 +1,6 @@
 package org.geoint.gf.audit.log;
 
+import org.geoint.gf.audit.log.jul.JULAuditLogger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.security.auth.login.LoginException;
