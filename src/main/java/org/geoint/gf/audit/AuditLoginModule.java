@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.security.auth.login.LoginException;
 
 /**
@@ -17,7 +19,9 @@ import javax.security.auth.login.LoginException;
  */
 public class AuditLoginModule extends BasePasswordLoginModule {
 
-    private final static AuditLogger logger = AuditLogger.logger();
+    private final static AuditLogger auditLogger = AuditLogger.logger();
+    private final static Logger logger
+            = Logger.getLogger(AuditLoginModule.class.getName());
 
     @Override
     protected void authenticateUser() throws LoginException {
@@ -26,21 +30,20 @@ public class AuditLoginModule extends BasePasswordLoginModule {
             throw new LoginException("No login attempted.");
         }
 
-        logger.debug("in the login audit module");
         if (!(_currentRealm instanceof AuditRealmDecorator)) {
-            final String error = "AuditPasswordLoginModule must "
+            final String error = "Unable to authenticate user, glassfish "
+                    + "audit model " + AuditLoginModule.class.getName() + " must "
                     + "be used with the AduitRealmDecorator realm.";
-            logger.error(AuditCategory.SYSTEM, error);
+            logger.log(Level.SEVERE, error);
             throw new LoginException(error);
         }
+
         AuditRealmDecorator realm = (AuditRealmDecorator) _currentRealm;
 
         String delegateLoginModule = realm.getDelegateLoginModule();
-        logger.debug("using delegate " + delegateLoginModule);
         Class lmClass;
         try {
             lmClass = Class.forName(delegateLoginModule);
-            logger.debug("initializing delegate LM " + lmClass.getName());
             BasePasswordLoginModule mod
                     = (BasePasswordLoginModule) lmClass.newInstance();
 
@@ -69,20 +72,38 @@ public class AuditLoginModule extends BasePasswordLoginModule {
 
             mod.initialize(_subject, null, _sharedState, _options);
 
-            logger.debug("attempting to login");
             mod.login();
             this.commitUserAuthentication(mod.getGroupsList());
-            logger.log(AuditCategory.AUTHENTICATION, "Login successsed for " + this.getUsername());
+
+            auditLogger.log(AuditCategory.AUTHENTICATION, this.username(),
+                    "Login successsed");
 
         } catch (LoginException ex) {
-            logger.log(AuditCategory.AUTHENTICATION, "Login failed for "
-                    + this.getUsername(), ex);
+            auditLogger.log(AuditCategory.AUTHENTICATION, this.username(),
+                    "Login failed.", ex);
             throw ex; //re-throw to fail login
         } catch (Exception ex) {
             final String error = "Unable to initialize JAAS Login module "
                     + delegateLoginModule;
-            logger.error(AuditCategory.SYSTEM, error, ex);
+            auditLogger.error(AuditCategory.SYSTEM, this.username(),
+                    error, ex);
             throw new LoginException(error);
         }
+    }
+
+    private String username() {
+        if (this.getUsername() != null
+                && !this.getUsername().contentEquals("unknown")) {
+            return this.getUsername();
+        }
+
+        if (this.getUserPrincipal() != null) {
+            final String principalName = this.getUserPrincipal().getName();
+            if (principalName != null) {
+                return principalName;
+            }
+        }
+
+        return null;
     }
 }

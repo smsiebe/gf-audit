@@ -14,16 +14,19 @@ import org.geoint.gf.audit.log.AuditCategory;
 import org.geoint.gf.audit.log.AuditLogger;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  */
 public class AuditRealmDecorator extends AppservRealm {
 
-    private final static AuditLogger logger = AuditLogger.logger();
+    private final static AuditLogger auditLogger = AuditLogger.logger();
     private final static String PROP_DECORATED_REALM = "audit.realm.decorated";
     private final static String PROP_DECORATED_LOGIN = "audit.login.decorated";
-
+    private final static Logger logger
+            = Logger.getLogger(AuditRealmDecorator.class.getName());
     private IASRealm realm;
     private String delegateLoginModule;
 
@@ -43,15 +46,16 @@ public class AuditRealmDecorator extends AppservRealm {
         //instantiate the delegative realm
         final String delegateType = parameters.getProperty(PROP_DECORATED_REALM);
         if (delegateType == null) {
-            logger.error(AuditCategory.SYSTEM, "Delegate realm could not be "
+            logger.log(Level.SEVERE, "Delegate realm could not be "
                     + "found.");
             return;
         }
         try {
-            realm = (IASRealm) Realm.instantiate("Audited Realm", delegateType, parameters);
-            logger.debug("Delegating realm calls to " + realm.getAuthType());
+            realm = (IASRealm) Realm.instantiate("Audited Realm",
+                    delegateType, parameters);
+            auditLogger.debug("Delegating realm calls to " + realm.getAuthType());
         } catch (Exception ex) {
-            logger.error(AuditCategory.SYSTEM, "Unable to load delegate JAAS "
+            logger.log(Level.SEVERE, "Unable to load delegate JAAS "
                     + "realm " + delegateType, ex);
         }
     }
@@ -70,7 +74,8 @@ public class AuditRealmDecorator extends AppservRealm {
     @Override
     public void persist() throws BadRealmException {
         if (getDecoratedRealm().supportsUserManagement()) {
-            logger.log(AuditCategory.USER_MGT, "saving changes to users");
+            auditLogger.log(AuditCategory.USER_MGT, null,
+                    "saving changes to users");
             getDecoratedRealm().persist();
         }
     }
@@ -91,7 +96,7 @@ public class AuditRealmDecorator extends AppservRealm {
                 sb.append("new username: '").append(newName).append("' ");
             }
             sb.append("groups: ").append(groups);
-            logger.log(AuditCategory.USER_MGT, sb.toString());
+            auditLogger.log(AuditCategory.USER_MGT, null, sb.toString());
             getDecoratedRealm().updateUser(name, newName, password, groups);
         }
     }
@@ -107,39 +112,42 @@ public class AuditRealmDecorator extends AppservRealm {
                 sb.append("new username: '").append(newName).append("' ");
             }
             sb.append("groups: ").append(groups);
-            logger.log(AuditCategory.USER_MGT, sb.toString());
+            auditLogger.log(AuditCategory.USER_MGT, null, sb.toString());
             getDecoratedRealm().updateUser(name, newName, password, groups);
         }
     }
 
     @Override
-    public void removeUser(String name) throws NoSuchUserException, BadRealmException {
+    public void removeUser(String name)
+            throws NoSuchUserException, BadRealmException {
         if (getDecoratedRealm().supportsUserManagement()) {
             StringBuilder sb = new StringBuilder();
             sb.append("deleting user '").append(name).append("'");
-            logger.log(AuditCategory.USER_MGT, sb.toString());
+            auditLogger.log(AuditCategory.USER_MGT, null, sb.toString());
             getDecoratedRealm().removeUser(name);
         }
     }
 
     @Override
-    public void addUser(String name, String password, String[] groupList) throws BadRealmException, IASSecurityException {
+    public void addUser(String name, String password, String[] groupList)
+            throws BadRealmException, IASSecurityException {
         if (getDecoratedRealm().supportsUserManagement()) {
             StringBuilder sb = new StringBuilder();
             sb.append("adding user '").append(name).append("'");
             sb.append("groups: ").append(groupList);
-            logger.log(AuditCategory.USER_MGT, sb.toString());
+            auditLogger.log(AuditCategory.USER_MGT, null, sb.toString());
             getDecoratedRealm().addUser(name, password, groupList);
         }
     }
 
     @Override
-    public void addUser(String name, char[] password, String[] groupList) throws BadRealmException, IASSecurityException {
+    public void addUser(String name, char[] password, String[] groupList)
+            throws BadRealmException, IASSecurityException {
         if (getDecoratedRealm().supportsUserManagement()) {
             StringBuilder sb = new StringBuilder();
             sb.append("adding user '").append(name).append("'");
             sb.append("groups: ").append(groupList);
-            logger.log(AuditCategory.USER_MGT, sb.toString());
+            auditLogger.log(AuditCategory.USER_MGT, null, sb.toString());
             getDecoratedRealm().addUser(name, password, groupList);
         }
     }

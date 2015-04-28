@@ -5,6 +5,7 @@ import org.geoint.gf.audit.log.AuditCategory;
 import org.geoint.gf.audit.log.AuditLogger;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import org.geoint.gf.audit.log.AuditAttribute;
 
 /**
  * Audit module plugin
@@ -13,7 +14,7 @@ public class AuditModulePlugin extends AuditModule {
 
     private static final String PROP_AUDIT_ON = "auditOn";
     private static boolean auditFlag = false;
-    private static final AuditLogger logger = AuditLogger.logger();
+    private static final AuditLogger auditLogger = AuditLogger.logger();
 
     /**
      * Check auditing state.
@@ -49,12 +50,16 @@ public class AuditModulePlugin extends AuditModule {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("user '").append((user != null) ? user : "unknown")
-                .append("' from ip ").append(req.getRemoteAddr())
+        sb.append("user")
                 .append(" has ")
                 .append((success) ? "successfully " : "failed to ")
-                .append("request web resource at ").append(req.getRequestURI());
-        logger.log(AuditCategory.REQUEST, sb.toString());
+                .append("access web resource '")
+                .append(req.getRequestURI())
+                .append("'");
+        auditLogger.log(AuditCategory.REQUEST, user, sb.toString(),
+                new AuditAttribute("ip", req.getRemoteAddr()),
+                new AuditAttribute("resource", req.getRequestURI())
+        );
     }
 
     /**
@@ -66,17 +71,24 @@ public class AuditModulePlugin extends AuditModule {
      * @param success the status of the ejb authorization request
      */
     @Override
-    public void ejbInvocation(String user, String ejb, String method, boolean success) {
+    public void ejbInvocation(String user, String ejb, String method,
+            boolean success) {
         if (!isActive()) {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("user '").append((user != null) ? user : "unknown")
-                .append("' has ")
+        sb.append("user")
+                .append(" has ")
                 .append((success) ? "successfully " : "failed to ")
-                .append("invoke the EJB method ").append(ejb).append("#")
+                .append("invoke the EJB method ")
+                .append(ejb)
+                .append("#")
                 .append(method);
-        logger.log(AuditCategory.REQUEST, sb.toString());
+
+        auditLogger.log(AuditCategory.REQUEST, user, sb.toString(),
+                new AuditAttribute("ejb", ejb),
+                new AuditAttribute("method", method)
+        );
     }
 
     /**
@@ -115,10 +127,10 @@ public class AuditModulePlugin extends AuditModule {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("user ").append((user != null) ? user : "unknown").append(" has ");
-        sb.append((success) ? "failed " : "succeeded ");
-        sb.append("autentication to realm ").append(realm);
-        logger.log(AuditCategory.AUTHENTICATION, sb.toString());
+        sb.append("user ")
+                .append((success) ? "failed " : "succeeded ")
+                .append("autentication to realm ").append(realm);
+        auditLogger.log(AuditCategory.AUTHENTICATION, user, sb.toString());
     }
 
     @Override
@@ -126,7 +138,7 @@ public class AuditModulePlugin extends AuditModule {
         if (!isActive()) {
             return;
         }
-        logger.log(AuditCategory.SYSTEM, "server started");
+        auditLogger.system("Glassfish started");
     }
 
     @Override
@@ -134,7 +146,7 @@ public class AuditModulePlugin extends AuditModule {
         if (!isActive()) {
             return;
         }
-        logger.log(AuditCategory.SYSTEM, "server started");
+        auditLogger.system("Glassfish stopped");
     }
 
 }

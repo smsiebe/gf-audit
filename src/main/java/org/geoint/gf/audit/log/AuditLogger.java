@@ -3,7 +3,6 @@ package org.geoint.gf.audit.log;
 import org.geoint.gf.audit.log.jul.JULAuditLogger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.security.auth.login.LoginException;
 
 /**
  *
@@ -38,12 +37,18 @@ public interface AuditLogger {
 
     void debug(String message);
 
-    void log(AuditCategory category, String message);
+    void system(String systemMessage);
 
-    void log(AuditCategory auditCategory, String string, LoginException ex);
+    void log(AuditCategory category, String username, String message,
+            AuditAttribute... attributes);
 
-    void error(AuditCategory auditCategory, String error);
+    void log(AuditCategory auditCategory, String username,
+            String string, Throwable ex, AuditAttribute... attributes);
 
-    void error(AuditCategory auditCategory, String error, Exception ex);
+    void error(AuditCategory auditCategory, String username, String error,
+            AuditAttribute... attributes);
+
+    void error(AuditCategory auditCategory, String username,
+            String error, Throwable ex, AuditAttribute... attributes);
 
 }
