@@ -83,7 +83,8 @@ public class JULAuditLogger implements AuditLogger {
     public void system(String message) {
         SplunkLogRecord r = new SplunkLogRecord(Level.INFO, message);
         r.field("category", AuditCategory.SYSTEM.name());
-       logger.log(r);
+
+        logger.log(r);
     }
 
     @Override
@@ -133,5 +134,7 @@ public class JULAuditLogger implements AuditLogger {
         for (AuditAttribute a : attributes) {
             r.field(a.getName(), a.getValue());
         }
+
+        logger.log(r);
     }
 }
