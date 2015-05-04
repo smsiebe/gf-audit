@@ -96,19 +96,19 @@ public class JULAuditLogger implements AuditLogger {
     @Override
     public void log(AuditCategory category, String username,
             String message, Throwable ex, AuditAttribute... attributes) {
-        log(category, Level.INFO, username, message, ex);
+        log(category, Level.INFO, username, message, ex, attributes);
     }
 
     @Override
     public void error(AuditCategory category, String username, String error,
             AuditAttribute... attributes) {
-        log(category, Level.SEVERE, username, error, null);
+        log(category, Level.SEVERE, username, error, null, attributes);
     }
 
     @Override
     public void error(AuditCategory category, String username,
             String error, Throwable ex, AuditAttribute... attributes) {
-        log(category, Level.SEVERE, username, error, ex);
+        log(category, Level.SEVERE, username, error, ex, attributes);
     }
 
     private void log(AuditCategory category, Level level,
