@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import org.geoint.gf.audit.log.AuditAttribute;
 import org.geoint.gf.audit.log.AuditCategory;
 import org.geoint.gf.audit.log.AuditLogger;
-import org.geoint.logging.splunk.SplunkLogRecord;
-import org.geoint.logging.splunk.StandardSplunkFormatter;
+import org.geoint.logging.splunk.jul.SplunkLogRecord;
+import org.geoint.logging.splunk.jul.StandardSplunkFormatter;
 
 /**
  * Logs audits using a {@link java.util.logging.Logger Logger} under the logger
